@@ -1,0 +1,112 @@
+include_internal_guide: false
+
+page:
+  size: A4
+  margins_cm:
+    left: 1.6
+    right: 1.6
+    top: 1.5
+    bottom: 1.5
+
+colors:
+  text: "000000"
+  section_heading: "000000"
+  job_title: "000000"
+  company_date: "444444"
+  horizontal_rule: "D9D9D9"
+
+horizontal_rule:
+  mode: skip # skip or subtle
+  size: 4
+  space: 1
+  space_after_pt: 2
+
+spacing:
+  line_spacing: 1.05
+  paragraph_after_pt: 3
+  name_after_pt: 2
+  title_after_pt: 3
+  contact_after_pt: 1
+  section_before_pt: 10
+  section_after_pt: 5
+  job_before_pt: 8
+  job_after_pt: 1.5
+  company_after_pt: 3
+  bullet_after_pt: 2.5
+
+fonts:
+  en:
+    latin: Aptos
+    fallback_latin: Calibri
+    east_asia: Microsoft YaHei
+    fallback_east_asia: SimSun
+  zh:
+    latin: Aptos
+    fallback_latin: Calibri
+    east_asia: Microsoft YaHei
+    fallback_east_asia: DengXian
+
+sizes_pt:
+  body: 10.5
+  name: 17
+  title: 11
+  contact: 9.8
+  section: 12.8
+  job_title: 11.2
+  company_date: 9.8
+  bullet: 10.5
+  skills: 10
+
+style_flags:
+  name:
+    bold: true
+  section:
+    bold: true
+    italic: false
+    all_caps: false
+    border_bottom: true
+  job_title:
+    bold: true
+    italic: false
+  company_date:
+    bold: false
+    italic: true
+
+bullet:
+  marker: "-"
+  left_twips: 620
+  hanging_twips: 440
+  font: Aptos
+
+date_layout:
+  mode: right_tab # right_tab or inline
+
+alignment:
+  default: left
+
+language_overrides:
+  zh:
+    alignment:
+      default: left
+      ResumeNormal: justify
+    spacing:
+      line_spacing: 1.0
+      paragraph_after_pt: 1.8
+      section_before_pt: 7
+      section_after_pt: 2.5
+      job_before_pt: 5
+      job_after_pt: 0.5
+      company_after_pt: 1.5
+      bullet_after_pt: 1.2
+      name_after_pt: 1.5
+      title_after_pt: 2
+      contact_after_pt: 0.5
+    sizes_pt:
+      section: 12.4
+      job_title: 11.0
+      company_date: 9.6
+      bullet: 10.3
+      skills: 9.8
+    style_flags:
+      section:
+        border_bottom: true

@@ -1,0 +1,128 @@
+name: CI and Windows release
+
+on:
+  push:
+    branches: ['**']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+jobs:
+  verify:
+    name: Test and build Windows
+    runs-on: windows-2022
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: resume-studio
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: resume-studio/package-lock.json
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: resume-studio/python/requirements*.txt
+      - name: Install pinned Rust toolchain
+        run: rustup show active-toolchain
+      - name: Install dependencies
+        run: |
+          npm ci
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m pip install -r python/requirements-build.txt
+      - name: Check public samples and repository files
+        run: python ../scripts/check_public_tree.py
+      - name: Check release version
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: python ../scripts/check_release_version.py
+      - name: TypeScript and Python tests
+        run: npm test
+      - name: Install browser for UI tests
+        run: npx playwright install chromium
+      - name: UI integration tests
+        run: npm run test:ui
+      - name: Build bundled Python engine
+        run: npm run engine:build
+      - name: Rust storage tests
+        run: cargo test --locked --manifest-path src-tauri/Cargo.toml
+      - name: Build Windows installer
+        run: npm run tauri -- build --ci -- --locked
+      - name: Check packaged Python engine
+        run: |
+          & ./src-tauri/target/release/resume-engine.exe --input fixtures/resume_en.yaml --config fixtures/style_config.yaml --lang en --output test-results/english.docx
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & ./src-tauri/target/release/resume-engine.exe --input fixtures/resume_zh.yaml --config fixtures/style_config.yaml --lang zh --output test-results/chinese.docx
+      - name: Create installer checksums
+        run: |
+          $folder = Resolve-Path src-tauri/target/release/bundle/nsis
+          $lines = Get-ChildItem -LiteralPath $folder -Filter '*-setup.exe' | ForEach-Object {
+            $hash = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+            "$hash  $($_.Name)"
+          }
+          if (-not $lines) { throw 'Installer was not created.' }
+          $lines | Set-Content -LiteralPath (Join-Path $folder 'SHA256SUMS.txt') -Encoding utf8NoBOM
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: resume-studio-windows-x64
+          path: |
+            resume-studio/src-tauri/target/release/bundle/nsis/*-setup.exe
+            resume-studio/src-tauri/target/release/bundle/nsis/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload test diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ui-test-diagnostics
+          path: resume-studio/test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  release:
+    name: Create draft release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: resume-studio-windows-x64
+          path: release
+      - name: Create or update draft release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            is_draft="$(gh release view "$RELEASE_TAG" --json isDraft --jq .isDraft)"
+            if [ "$is_draft" != true ]; then
+              echo 'Refusing to replace assets on an already published release.' >&2
+              exit 1
+            fi
+            gh release upload "$RELEASE_TAG" release/* --clobber
+          else
+            gh release create "$RELEASE_TAG" release/* --verify-tag --draft \
+              --title "Resume Studio $RELEASE_TAG" --generate-notes
+          fi

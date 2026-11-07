@@ -1,0 +1,45 @@
+{
+  "name": "resume-studio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "test": "vitest run && python -m unittest discover -s tests -p test_*.py",
+    "test:ui": "playwright test",
+    "tauri": "tauri",
+    "desktop": "tauri dev --config src-tauri/tauri.dev.conf.json",
+    "engine:build": "python scripts/build_engine.py",
+    "desktop:build": "npm run engine:build && tauri build",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@codemirror/lang-yaml": "^6.1.2",
+    "@codemirror/language": "^6.11.0",
+    "@codemirror/legacy-modes": "^6.5.0",
+    "@codemirror/merge": "^6.10.0",
+    "@codemirror/state": "^6.5.0",
+    "@codemirror/view": "^6.36.0",
+    "@tauri-apps/api": "^2.0.0",
+    "@tauri-apps/plugin-dialog": "^2.0.0",
+    "@uiw/react-codemirror": "^4.23.0",
+    "docx-preview": "^0.3.6",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "smol-toml": "^1.3.0",
+    "yaml": "^2.7.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.51.0",
+    "@tauri-apps/cli": "^2.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.0",
+    "vitest": "^4.1.12"
+  }
+}

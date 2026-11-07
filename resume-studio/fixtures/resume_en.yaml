@@ -1,0 +1,89 @@
+# Fictional sample. People, organizations, achievements, and education are invented.
+profile:
+  name: John Doe
+  title: Software Engineer | Web Applications & Developer Tools
+  contacts:
+    - "Email: john.doe@example.com"
+    - "Portfolio: https://example.com/john-doe"
+    - "Location: Example City"
+
+sections:
+  - type: summary
+    title: Profile
+    paragraphs:
+      - Software engineer who builds accessible web applications and practical developer tools. Enjoys turning an unclear problem into a small, testable feature and documenting the decisions behind it.
+      - Experienced in collaborating with designers, support teams, and other engineers on fictional scheduling and inventory products. Interested in reliable delivery, readable code, and useful feedback from customers.
+
+  - type: skills
+    title: Skills
+    groups:
+      - label: Application Development
+        text: TypeScript, React, Python, HTTP APIs, SQL, responsive layouts
+      - label: Quality & Delivery
+        text: Unit tests, browser tests, code review, CI workflows, release notes
+      - label: Data & Operations
+        text: PostgreSQL, structured logging, dashboards, database migrations
+      - label: Collaboration
+        text: Technical writing, requirements workshops, mentoring, accessibility reviews
+
+  - type: experience
+    title: Experience
+    items:
+      - role: Software Engineer
+        company: Example Orchard Software (fictional)
+        location: Example City
+        dates: Jan 2023 – Present
+        description: A fictional team building scheduling tools for community workshops.
+        bullets:
+          - Built a calendar interface with keyboard navigation, clear validation messages, and reusable form components.
+          - Added API integration tests for booking changes and cancellation workflows, including conflicting requests.
+          - Worked with a designer to simplify registration and explain availability before a booking was submitted.
+          - Introduced a preview environment for each pull request so teammates could review changes before release.
+          - Documented common support scenarios and added structured logs to make failed requests easier to investigate.
+      - role: Junior Software Engineer
+        company: Sample Lantern Systems (fictional)
+        location: Demo Town
+        dates: Jul 2020 – Dec 2022
+        description: A fictional inventory application for small lending libraries.
+        bullets:
+          - Developed search and filtering screens for equipment records using React and a Python API.
+          - Implemented import validation that reported the row and field for each malformed record.
+          - Added database migrations and a repeatable setup script for local development.
+          - Paired with senior engineers to investigate defects, write regression tests, and prepare release notes.
+      - role: Software Development Intern
+        company: Fictional Meadow Lab
+        location: Example City
+        dates: Jun 2019 – Aug 2019
+        bullets:
+          - Created a small dashboard showing the status of sample sensor readings.
+          - Wrote scripts to generate synthetic test data and document the expected input format.
+          - Presented a working prototype and a short maintenance guide to the project team.
+
+  - type: bullets
+    title: Selected Projects
+    bullets:
+      - "**Workshop Planner:** A fictional scheduling demo with accessible forms, calendar views, and booking conflict checks."
+      - "**Reading Shelf:** A learning project using synthetic book records to explore search, pagination, and CSV imports."
+      - "**Release Checklist:** A command-line experiment that checks version numbers and assembles release notes from sample changes."
+
+  - type: education
+    title: Education
+    items:
+      - school: Example Valley University (fictional)
+        degree: Bachelor of Science in Computer Science
+        dates: Sep 2016 – Jun 2020
+        bullets:
+          - "Coursework: data structures, software design, databases, and human-computer interaction."
+          - "Capstone: a campus room-booking prototype built with synthetic users and schedules."
+      - school: Demonstration Learning Academy (fictional)
+        degree: Certificate in Accessible Interface Design
+        dates: Mar 2022 – Jun 2022
+        bullets:
+          - Practiced keyboard testing, semantic HTML, and clear error-message design through sample exercises.
+
+  - type: bullets
+    title: Community & Interests
+    bullets:
+      - "**Community:** Volunteer facilitator at an imaginary monthly beginner coding workshop."
+      - "**Interests:** Board games, sketching, and building small tools for everyday tasks."
+      - "**Sample notice:** This resume demonstrates formatting only and does not describe a real person."

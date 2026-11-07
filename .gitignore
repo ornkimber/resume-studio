@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# PyInstaller
+build/
+*.spec
+*.exe
+
+# Generated resume outputs
+*.docx
+*.pdf
+*.log
+exports/
+
+# Local/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.env
+.env.*
+!.env.example
+*.bak
+*.backup
+*.tmp
+*.tsbuildinfo
+workspace*.json
+private/
+.test-data/
+test-results/
+playwright-report/
+node_modules/
+dist/
+target/
+.cache/
+coverage/
